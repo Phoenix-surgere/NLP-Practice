@@ -3,28 +3,44 @@
 Created on Wed Jul 31 13:58:04 2019
 
 @author: black
-
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from collections import Counter
-from pandas import DataFrame as DF
-import matplotlib.pyplot as plt
-from nltk.stem import WordNetLemmatizer as WNL
-lemmatizer = WNL()
-string = 'I am a bay, but I am not an old fuck. Who said I am a wonderfully FUCK?!'
-tokens = word_tokenize(string)
-
-tokens = Counter(word_tokenize(string))
-tokens = DF([tokens]); tokens = tokens.T
-tokens.columns = ['frequencies']
-tokens.sort_values(by='frequencies').plot(kind='bar')
-plt.show()
-tokens = [token.lower() for token in tokens]
-from gensim.corpora.dictionary import Dictionary
-tokens = [t for t in tokens if t not in stopwords.words('english')]
-#dict_tokens = Dictionary(tokens)
 """
 
+
 #NLTK Book Scripts go here
-#from nltk import *
-from nltk.book import *
+#Chapter 1
+from nltk.book import text3 as bible,  \           #to avoid star imports
+text1 as moby_dick, text4 as inaugural_address, \
+text2 as Jane_austen, text5 as chat
+
+text1.concordance('monstrous') #Search for word, needs specific format to work
+text2.similar('monstrous')     #similar words, differs per text!
+text3.similar('God')
+
+Jane_austen.common_contexts(["monstrous", 'very'])  #Common contexts for words
+
+#Dispersion text tells us distribution of each word along the text's progression
+inaugural_address.dispersion_plot(['citizens' , 'democracy', 'freedom', 'duties', 'America', 'God']) 
+bible.dispersion_plot(['Jesus', 'God'])
+
+chat.generate()      #generate text based on style of input
+bible.generate()      #each time is different
+inaugural_address.generate()  #according to the text!
+
+texts = [bible, moby_dick, inaugural_address,
+         Jane_austen, chat]
+
+for text in texts:
+    print('{}'.format(text), len(text))  #sample chosen texts' nominal sizes
+    
+def lexical_diversity(text):
+    '''
+       How many times a word appears on average on given text. 
+       Higher means poorer diversity, lower better diversity
+    '''   
+    return(len(text) / len(set(text)))
+    
+def percent_word(text,word):
+  ''' What percent of the text constitutes of the target- word'''
+    count = text.count(word)
+    percent = 100*count/ len(text)
+    return percent
