@@ -12,7 +12,7 @@ from nltk.book import text3 as bible,  \           #to avoid star imports
 text1 as moby_dick, text4 as inaugural_address, \
 text2 as Jane_austen, text5 as chat
 
-text1.concordance('monstrous') #Search for word, needs specific format to work
+text1.concordance('monstrous') #Search for word, ONLY WORKS with * import! 
 text2.similar('monstrous')     #similar words, differs per text!
 text3.similar('God')
 
