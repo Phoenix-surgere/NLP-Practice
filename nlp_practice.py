@@ -84,3 +84,29 @@ words_with_initial_capital = [w for w in Jane_austen if w.istitle()]
 words_only_digits = [w for w in chat if w.isdigit()]
 words_lower_unique = len(set([w.lower() for w in chat if w.isalpha() ])) #true vocab
 #HERE: TO SOLVE SOME CHAPTER 1 EXERCISES
+#---------------------------------
+##CHAPTER 2:Accessing Text Corpora
+import nltk
+#print(nltk.corpus.gutenberg.fileids()) #prints filenames for nltk.gutenberg
+emma = nltk.corpus.gutenberg.words('austen-emma.txt') #select text
+#print(len(emma))
+emma = nltk.Text(emma)  #to use previous functions as with nltk.book txts
+print(emma.concordance('surprise'))
+print(' '.join(emma[20:50])) #LIST to STRING - comes out as text
+
+#examples of corpus available in nltk
+from nltk.corpus import webtext  #less formal text
+print(webtext.fileids())  #filenames
+
+from nltk.corpus import nps_chat #predators
+print(nps_chat.fileids()) 
+
+from nltk.corpus import brown #brown uni various texts
+print(brown.fileids())
+
+from nltk.corpus import reuters
+print(reuters.fileids())
+
+from nltk.corpus import inaugural
+print(inaugural.fileids())
+#page 72 for a variety of corpus functionality commands
