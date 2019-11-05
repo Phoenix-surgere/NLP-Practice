@@ -110,3 +110,23 @@ print(reuters.fileids())
 from nltk.corpus import inaugural
 print(inaugural.fileids())
 #page 72 for a variety of corpus functionality commands
+
+
+
+##SPACY SECTION - DataCamp course code collection, starting with 'Feature Engineering for NLP'
+import spacy 
+# Load model and create Doc object
+nlp = spacy.load('en')
+
+# Function to preprocess text
+def preprocess(text):
+  	# Create Doc object
+    doc = nlp(text)
+    # Generate lemmas
+    lemmas = [token.lemma_ for token in doc]
+    # Remove stopwords and non-alphabetic characters
+    a_lemmas = [lemma for lemma in lemmas 
+            if lemma.isalpha() and lemma not in stopwords]
+    
+    return ' '.join(a_lemmas)
+
