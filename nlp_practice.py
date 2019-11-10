@@ -130,3 +130,15 @@ def preprocess(text):
     
     return ' '.join(a_lemmas)
 
+#POS tagging
+pos = [(token.text, token.pos_) for token in doc]  
+
+#NER
+ner = [(ent.text, ent.label_) for ent in doc.ents)]
+
+#n-gram creation
+from sklearn.feature_extraction.text import CountVectorizer as CVec
+vectorizer = CVer(ngram_range=(start, end))
+#corpus = pd.Series(['', '', .... ,''])
+bow_matrix = vectorizer.fit_transform(corpus)
+
