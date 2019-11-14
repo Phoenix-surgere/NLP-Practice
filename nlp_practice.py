@@ -142,3 +142,14 @@ vectorizer = CVer(ngram_range=(start, end))
 #corpus = pd.Series(['', '', .... ,''])
 bow_matrix = vectorizer.fit_transform(corpus)
 
+#Naive Bayes classifier import
+#from sklearn.naive_bayes import MultinomialNB
+
+#tf-idf vectors
+from sklearn.feature_extraction import TfidfVectorizer as Tf
+vec = Tf()
+tfidf_matrix= vec.fit_transform(corpus)
+
+#cosine similarity
+from sklearn.metrics.pairwise import cosine_similarity #for general cases
+from sklearn.metrics.pairwise import linear_kernel #for when norms don't matter, as in tfidf vectors
