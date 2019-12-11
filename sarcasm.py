@@ -51,7 +51,6 @@ max_len = 7       #For Padding
 vocab_size = 500  #For Tokenizer
 embedding_dim = 16
 train_fraction = 0.9
-#train_size = int(df.shape[0] * train_fraction)
 
 X_train, X_test, y_train, y_test = train_test_split(X,y, 
     train_size=train_fraction, random_state=seed)
@@ -82,4 +81,3 @@ model.compile(optimizer='adam', metrics=['accuracy'], loss='binary_crossentropy'
 history = model.fit(train_padded, y_train, 
           validation_data=(test_padded, y_test), epochs=50)
 plot_loss_metric(history)
-#           keras.layers.Embedding() ])
