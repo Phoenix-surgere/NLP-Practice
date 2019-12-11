@@ -27,12 +27,12 @@ def sliceurl(link):
         result = re.sub(r'\.co.+', "",result)
     return result
 
-#eda = df[:]
+eda = df[:]
 #EDA Result: All onions are sarcastic, all Huffpost are real
-    #Relative balance of the two classes, 45% sarcasm
-#eda['article_link_clean'] = eda['article_link'].apply(sliceurl)
-#eda.drop(columns=['article_link', 'headline'],inplace=True)
-#sarcastic = eda[eda['is_sarcastic'] == 1]
+#Relative balance of the two classes, 45% sarcasm, so accuracy should work as a metric and no special technigues needed for imbalance
+eda['article_link_clean'] = eda['article_link'].apply(sliceurl)
+eda.drop(columns=['article_link', 'headline'],inplace=True)
+sarcastic = eda[eda['is_sarcastic'] == 1]
 df.drop(columns=['article_link'], inplace=True)
 
 sarfrac =df[df.is_sarcastic == 1].shape[0] / df.shape[0]
@@ -43,6 +43,7 @@ X,y = df[['headline']], df[['is_sarcastic']]
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from sklearn.model_selection import train_test_split
+import keras
 
 seed = 666
 oov_tok = "<OOV>"
@@ -54,13 +55,31 @@ train_fraction = 0.9
 
 X_train, X_test, y_train, y_test = train_test_split(X,y, 
     train_size=train_fraction, random_state=seed)
-                                                     
+
+X_train = X_train['headline'].tolist()
+X_test = X_test['headline'].tolist()
+
 tokenizer = Tokenizer(num_words=vocab_size ,oov_token=oov_tok)
 tokenizer.fit_on_texts(X_train) #Tokenizer on TRAIN SET
 word_index = tokenizer.word_index
-sequences = tokenizer.texts_to_sequences(X_train) 
-padded = pad_sequences(sequences, maxlen=max_len)
+
+training_sequences = tokenizer.texts_to_sequences(X_train) 
+train_padded = pad_sequences(training_sequences, maxlen=max_len)
+
+testing_sequences = tokenizer.texts_to_sequences(X_test)
+test_padded = pad_sequences(testing_sequences, maxlen=max_len)
 
 
-#model = keras.models.Sequential([
+model = keras.models.Sequential([
+    keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_len),
+    keras.layers.Bidirectional(keras.layers.LSTM(64, return_sequences=True)),
+    keras.layers.Bidirectional(keras.layers.LSTM(32, return_sequences=False)),
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dense(1, activation='sigmoid')
+    ])
+    
+model.compile(optimizer='adam', metrics=['accuracy'], loss='binary_crossentropy')
+history = model.fit(train_padded, y_train, 
+          validation_data=(test_padded, y_test), epochs=50)
+plot_loss_metric(history)
 #           keras.layers.Embedding() ])
